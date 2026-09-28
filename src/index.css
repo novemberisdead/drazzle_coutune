@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+/* Night Window tokens. Source of truth: the design canvas "A · Tokens" board. */
+@theme {
+  --color-night: #0b0908;
+  --color-surface: #15100e;
+  --color-gold: #b8983c;
+  --color-gold-bright: #d4b65e;
+  --color-crimson: #8a1c24;
+  --color-crimson-hover: #9e2630;
+  --color-ivory: #efe6d6;
+  --color-muted: #a89f90;
+  --color-champagne: #e7d6a8;
+  --color-band: #f4eee2;
+  --color-band-field: #fbf8f1;
+  --color-tape: #eadfc4;
+  --color-gold-deep: #7a6220;
+  --color-gold-deeper: #6b551b;
+  --color-ink: #1a1411;
+  --color-ink-muted: #5e5549;
+
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Jost", system-ui, sans-serif;
+
+  --ease-settle: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --radius-field: 12px;
+  --radius-option: 14px;
+}
+
+@layer base {
+  html {
+    background: var(--color-night);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background: var(--color-night);
+  }
+  ::selection {
+    background: var(--color-crimson);
+    color: var(--color-band);
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 4px;
+  }
+  /* On the ivory band gold is only 2.4:1, so rings switch to gold-deep. */
+  .on-band :focus-visible {
+    outline-color: var(--color-gold-deep);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 120ms !important;
+    }
+  }
+}
+
+@layer components {
+  .kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+  .hairline {
+    height: 1px;
+    background: linear-gradient(90deg, rgb(184 152 60 / 0), rgb(184 152 60 / 0.6), rgb(184 152 60 / 0));
+  }
+  .stitch {
+    border-top: 1px dashed rgb(122 98 32 / 0.7);
+  }
+  .tile-fade {
+    background: linear-gradient(180deg, rgb(11 9 8 / 0), rgb(11 9 8 / 0.92));
+  }
+  .glow {
+    animation: breathe 6s linear infinite alternate;
+  }
+  /* Scroll reveal: opacity 0→1, scale 1.04→1 over 900 ms. */
+  .reveal {
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity 900ms var(--ease-settle),
+      transform 900ms var(--ease-settle);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .tape-band {
+    background:
+      repeating-linear-gradient(90deg, rgb(122 98 32 / 0.55) 0 1px, transparent 1px 12px) 0 0 / 100% 7px no-repeat,
+      repeating-linear-gradient(90deg, #7a6220 0 1px, transparent 1px 60px) 0 0 / 100% 12px no-repeat,
+      var(--color-tape);
+  }
+  .perforated-top {
+    background: radial-gradient(circle at 6px 0, var(--color-night) 5px, transparent 5.5px) 0 0 / 14px 12px repeat-x;
+  }
+}
+
+@keyframes breathe {
+  from {
+    opacity: 0.75;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tag-swing {
+  from {
+    opacity: 0;
+    transform: translateY(-24px) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(16px); } }
+@keyframes slide-in-right { from { transform: translateX(100%); } }
+@keyframes slide-out-right { to { transform: translateX(100%); } }
+@keyframes slide-in-left { from { transform: translateX(-100%); } }
+@keyframes slide-out-left { to { transform: translateX(-100%); } }
